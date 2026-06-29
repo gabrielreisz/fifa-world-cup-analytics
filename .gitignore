@@ -28,6 +28,9 @@ dist/
 coverage.xml
 htmlcov/
 
+# Persisted models
+models/
+
 # Environments
 .venv/
 venv/

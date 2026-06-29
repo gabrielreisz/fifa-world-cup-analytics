@@ -13,7 +13,9 @@ target leakage and a strict temporal train/test split is meaningful.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
+import joblib
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -170,6 +172,18 @@ class MatchPredictor:
 
     def rating(self, team: str) -> float:
         return float(self.ratings.get(team, config.ELO_START))
+
+    def save(self, path: str | Path) -> Path:
+        """Persist the trained predictor to disk (joblib)."""
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        joblib.dump(self, path)
+        return path
+
+    @classmethod
+    def load(cls, path: str | Path) -> MatchPredictor:
+        """Load a predictor previously saved with :meth:`save`."""
+        return joblib.load(path)
 
     def predict(self, home: str, away: str) -> dict:
         rh, ra = self.rating(home), self.rating(away)

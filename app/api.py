@@ -9,7 +9,9 @@ Then open http://127.0.0.1:8000/docs
 """
 from __future__ import annotations
 
+import os
 from functools import lru_cache
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 
@@ -24,6 +26,10 @@ app = FastAPI(
 
 @lru_cache(maxsize=2)
 def _predictor(competition: str) -> models.MatchPredictor:
+    # Load a pre-trained model if available (fast startup), else train on the fly.
+    path = Path(os.environ.get("WORLDCUP_MODEL", f"models/predictor_{competition}.joblib"))
+    if path.exists():
+        return models.MatchPredictor.load(path)
     return models.MatchPredictor.train(features.build_matches(competition))
 
 

@@ -67,5 +67,17 @@ def predict(home: str, away: str) -> None:
                f"(most likely {r['most_likely_score']})")
 
 
+@app.command("train")
+def train(
+    out: str = typer.Option("models/predictor_men.joblib", help="Output model path."),
+    competition: str = typer.Option("men"),
+) -> None:
+    """Train the match predictor and persist it to disk (joblib)."""
+    matches = features.build_matches(competition)
+    predictor = models.MatchPredictor.train(matches)
+    path = predictor.save(out)
+    typer.secho(f"Saved trained predictor to {path}", fg=typer.colors.GREEN)
+
+
 if __name__ == "__main__":
     app()
