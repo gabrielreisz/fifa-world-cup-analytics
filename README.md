@@ -75,6 +75,8 @@ Brazil (Elo 1734) vs Argentina (Elo 1723)
   expected goals: 1.53 - 0.99 (most likely 1-0)
 ```
 
+> 📓 New here? Start with the guided notebook **[`notebooks/01_overview.ipynb`](notebooks/01_overview.ipynb)**.
+
 ### Use it as a library
 
 ```python
@@ -107,7 +109,9 @@ fifa-world-cup-analytics/
 │   └── cli.py               # `worldcup` command-line interface
 ├── app/                     # Streamlit dashboard + FastAPI service
 ├── tests/                   # pytest suite (no network needed)
-├── notebooks/academic/      # the original university deliverable (preserved)
+├── notebooks/
+│   ├── 01_overview.ipynb    # guided tour of the package (start here)
+│   └── academic/            # the original university deliverable (preserved)
 ├── reports/figures/         # generated figures (git-ignored)
 └── .github/workflows/ci.yml # lint + tests on every push
 ```
