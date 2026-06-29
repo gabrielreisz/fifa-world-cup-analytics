@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import typer
 
-from . import analysis, data, elo, features, models, viz
+from . import analysis, data, elo, features, models, records, simulation, viz
 
 app = typer.Typer(add_completion=False, help="FIFA World Cup analytics toolkit.")
 
@@ -65,6 +65,37 @@ def predict(home: str, away: str) -> None:
     typer.echo(f"  P({away} win) = {r['p_away_win']*100:5.1f}%")
     typer.echo(f"  expected goals: {r['exp_home_goals']} - {r['exp_away_goals']} "
                f"(most likely {r['most_likely_score']})")
+
+
+@app.command("simulate")
+def simulate(
+    top: int = typer.Option(16, help="Use the top-N teams by current Elo."),
+    mode: str = typer.Option("knockout", help="knockout | tournament"),
+    n_sims: int = typer.Option(20000, help="Number of Monte Carlo runs."),
+) -> None:
+    """Monte Carlo title odds for the strongest teams."""
+    matches = features.build_matches("men")
+    predictor = models.MatchPredictor.train(matches)
+    teams = list(predictor.ratings.head(top).index)
+    if mode == "tournament":
+        res = simulation.simulate_tournament(predictor, teams, n_sims=max(n_sims // 4, 1000))
+        cols = ["team", "elo", "p_advance", "p_champion"]
+    else:
+        res = simulation.simulate_knockout(predictor, teams, n_sims=n_sims)
+        cols = ["team", "elo", "p_champion", "p_final", "p_semifinal"]
+
+    typer.secho(f"\nTitle odds ({mode}, top {top}):", bold=True)
+    for r in res[cols].head(10).itertuples(index=False):
+        typer.echo(f"  {r.team:16s} Elo {int(r.elo):>4}  champion {r.p_champion * 100:5.1f}%")
+
+
+@app.command("top-scorers")
+def top_scorers(competition: str = typer.Option("men"), top: int = typer.Option(10)) -> None:
+    """All-time top scorers (own goals excluded)."""
+    df = records.top_scorers(competition, top=top)
+    typer.secho(f"\nTop scorers ({competition}):", bold=True)
+    for name, row in df.iterrows():
+        typer.echo(f"  {name:24s} {int(row['goals']):>2} goals  ({row['team']})")
 
 
 if __name__ == "__main__":

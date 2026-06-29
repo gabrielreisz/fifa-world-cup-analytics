@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import pandas as pd
 import streamlit as st
 
-from worldcup import analysis, elo, features, models
+from worldcup import analysis, elo, features, models, records, simulation
 
 st.set_page_config(page_title="World Cup Analytics", page_icon="⚽", layout="wide")
 
@@ -41,7 +41,9 @@ history = elo.compute_elo(matches)
 predictor = get_predictor(competition)
 teams = sorted(predictor.ratings.index)
 
-tab_predict, tab_ratings, tab_trends = st.tabs(["🔮 Predict", "📊 Elo ratings", "📈 Trends"])
+tab_predict, tab_sim, tab_records, tab_ratings, tab_trends = st.tabs(
+    ["🔮 Predict", "🏆 Simulate", "🏅 Records", "📊 Elo ratings", "📈 Trends"]
+)
 
 with tab_predict:
     c1, c2 = st.columns(2)
@@ -62,6 +64,46 @@ with tab_predict:
         )
         st.bar_chart(pd.Series(
             {home: r["p_home_win"], "Draw": r["p_draw"], away: r["p_away_win"]}, name="probability"))
+
+
+@st.cache_data(show_spinner="Running Monte Carlo…")
+def run_simulation(competition: str, top: int, mode: str, n_sims: int) -> pd.DataFrame:
+    pred = get_predictor(competition)
+    chosen = list(pred.ratings.head(top).index)
+    if mode == "Full tournament":
+        return simulation.simulate_tournament(pred, chosen, n_sims=n_sims)
+    return simulation.simulate_knockout(pred, chosen, n_sims=n_sims)
+
+
+with tab_sim:
+    st.subheader("Monte Carlo title odds")
+    st.caption("Simulate the strongest teams thousands of times using the Elo + Poisson models.")
+    c1, c2 = st.columns(2)
+    topn = c1.slider("Teams (by Elo)", 4, 32, 16, step=4)
+    mode = c2.radio("Format", ["Knockout", "Full tournament"], horizontal=True)
+    sim = run_simulation(competition, topn, mode, 20000 if mode == "Knockout" else 4000)
+    st.bar_chart(sim.set_index("team")["p_champion"].head(12))
+    pct_cols = [c for c in sim.columns if c.startswith("p_")]
+    show = sim.assign(**{c: (sim[c] * 100).round(1) for c in pct_cols})
+    st.dataframe(show, use_container_width=True, hide_index=True)
+
+
+@st.cache_data(show_spinner="Loading records…")
+def cached(fn_name: str, competition: str):
+    return getattr(records, fn_name)(competition)
+
+
+with tab_records:
+    st.subheader("🥇 All-time top scorers")
+    st.dataframe(cached("top_scorers", competition), use_container_width=True)
+    c1, c2 = st.columns(2)
+    with c1:
+        st.subheader("⏱️ When are goals scored?")
+        st.bar_chart(cached("goal_timing", competition)["pct"])
+    with c2:
+        st.subheader("🎯 Shootout conversion")
+        st.dataframe(cached("shootout_conversion", competition)[["kicks", "conversion_pct"]],
+                     use_container_width=True)
 
 with tab_ratings:
     st.subheader("Current Elo ranking")
