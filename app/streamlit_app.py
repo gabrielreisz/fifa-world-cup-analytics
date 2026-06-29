@@ -7,6 +7,13 @@ Run with::
 """
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+# Make `worldcup` importable on Streamlit Community Cloud even when the package
+# is not pip-installed (the Cloud only runs `pip install -r requirements.txt`).
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
 import pandas as pd
 import streamlit as st
 
