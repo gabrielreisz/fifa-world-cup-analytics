@@ -49,3 +49,33 @@ def load_matches() -> pd.DataFrame:
     df = _load_table("matches")
     df["match_date"] = pd.to_datetime(df["match_date"], errors="coerce")
     return df
+
+
+def load_goals() -> pd.DataFrame:
+    """Return the goals table (one row per goal)."""
+    return _load_table("goals")
+
+
+def load_squads() -> pd.DataFrame:
+    """Return the squads table (one row per player per edition)."""
+    return _load_table("squads")
+
+
+def load_players() -> pd.DataFrame:
+    """Return the players table (one row per player, incl. birth date)."""
+    return _load_table("players")
+
+
+def load_bookings() -> pd.DataFrame:
+    """Return the bookings table (one row per card)."""
+    return _load_table("bookings")
+
+
+def load_penalty_kicks() -> pd.DataFrame:
+    """Return the penalty-shootout kicks table (one row per kick)."""
+    return _load_table("penalty_kicks")
+
+
+def load_tournament_standings() -> pd.DataFrame:
+    """Return the final standings table (positions 1-4 per edition)."""
+    return _load_table("tournament_standings")

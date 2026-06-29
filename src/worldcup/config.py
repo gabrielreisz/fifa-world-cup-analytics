@@ -22,6 +22,12 @@ DATA_BASE_URL = "https://raw.githubusercontent.com/jfjelstul/worldcup/master/dat
 TABLES = {
     "tournaments": f"{DATA_BASE_URL}/tournaments.csv",
     "matches": f"{DATA_BASE_URL}/matches.csv",
+    "goals": f"{DATA_BASE_URL}/goals.csv",
+    "players": f"{DATA_BASE_URL}/players.csv",
+    "squads": f"{DATA_BASE_URL}/squads.csv",
+    "bookings": f"{DATA_BASE_URL}/bookings.csv",
+    "penalty_kicks": f"{DATA_BASE_URL}/penalty_kicks.csv",
+    "tournament_standings": f"{DATA_BASE_URL}/tournament_standings.csv",
 }
 
 # --- Domain constants --------------------------------------------------------
