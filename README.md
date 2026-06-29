@@ -53,6 +53,10 @@ streamlit run app/streamlit_app.py
   *leak-free* feature for prediction.
 - **Two prediction models** — a calibrated 1X2 outcome model (logistic regression on the Elo
   gap) and a Poisson scoreline model (expected goals + full score matrix).
+- **Monte Carlo simulator** — simulate knockout brackets and full group+knockout tournaments
+  thousands of times to estimate every team's title odds.
+- **Player & team records** — top scorers, goal-timing distribution, shootout conversion,
+  discipline trends and squad ages, from the goals / squads / bookings tables.
 - **Honest evaluation** — strict temporal back-test (train pre-2014, test 2014+) against a
   baseline.
 - **Statistical analyses** — goal-scoring trends, host advantage (Welch t-test), the 0-0
@@ -89,6 +93,8 @@ worldcup build-data          # download & cache the datasets
 worldcup report              # headline findings + figures -> reports/figures/
 worldcup evaluate            # temporal back-test of the outcome model
 worldcup predict Brazil Argentina
+worldcup simulate --top 16   # Monte Carlo title odds (knockout or tournament)
+worldcup top-scorers         # all-time top scorers
 ```
 
 Example:
@@ -129,6 +135,8 @@ fifa-world-cup-analytics/
 │   ├── elo.py               # chronological Elo rating engine
 │   ├── analysis.py          # descriptive + inferential analyses
 │   ├── models.py            # outcome + Poisson scoreline models, back-test
+│   ├── simulation.py        # Monte Carlo knockout / tournament simulator
+│   ├── records.py           # player & team records (goals, squads, bookings)
 │   ├── viz.py               # figure generation
 │   └── cli.py               # `worldcup` command-line interface
 ├── app/                     # Streamlit dashboard + FastAPI service
