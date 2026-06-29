@@ -152,12 +152,24 @@ fifa-world-cup-analytics/
 - Historical/split nations (West Germany, Soviet Union, Yugoslavia, …) are mapped to a modern
   entity so long-run analyses aren't fragmented — see `config.TEAM_ALIASES`.
 
+## 🐳 Deployment & engineering
+
+```bash
+worldcup train                 # train & persist the model -> models/predictor_men.joblib
+docker compose up --build      # API (:8000) + dashboard (:8501)
+```
+
+The FastAPI service loads a persisted model when present (fast cold starts) and otherwise
+trains on the fly. A scheduled GitHub Action re-downloads the dataset weekly and runs the
+integration tests, so upstream data changes are caught automatically.
+
 ## 🧪 Development
 
 ```bash
 make test     # pytest -m "not integration"
 make lint     # ruff
 make report   # regenerate figures
+pre-commit install   # enable ruff lint+format on every commit
 ```
 
 ## 📚 Data & license
