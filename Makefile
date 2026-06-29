@@ -15,6 +15,10 @@ evaluate:       ## back-test the match-outcome model
 test:           ## run the unit test suite
 	pytest -m "not integration"
 
+coverage:       ## run tests with coverage and refresh the badge
+	pytest -m "not integration" --cov=worldcup --cov-report=term-missing --cov-report=xml
+	genbadge coverage -i coverage.xml -o assets/coverage.svg
+
 lint:           ## run ruff
 	ruff check src tests
 

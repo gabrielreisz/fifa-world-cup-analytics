@@ -1,6 +1,7 @@
 # ⚽ FIFA World Cup — Analytics & Match Prediction
 
 [![CI](https://github.com/gabrielreisz/fifa-world-cup-analytics/actions/workflows/ci.yml/badge.svg)](https://github.com/gabrielreisz/fifa-world-cup-analytics/actions/workflows/ci.yml)
+[![Coverage](assets/coverage.svg)](assets/coverage.svg)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Code style: ruff](https://img.shields.io/badge/lint-ruff-orange)](https://github.com/astral-sh/ruff)
