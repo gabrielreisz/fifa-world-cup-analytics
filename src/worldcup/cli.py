@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import typer
 
-from . import analysis, data, elo, features, models, viz
+from . import analysis, data, elo, external, features, models, viz
 
 app = typer.Typer(add_completion=False, help="FIFA World Cup analytics toolkit.")
 
@@ -65,6 +65,17 @@ def predict(home: str, away: str) -> None:
     typer.echo(f"  P({away} win) = {r['p_away_win']*100:5.1f}%")
     typer.echo(f"  expected goals: {r['exp_home_goals']} - {r['exp_away_goals']} "
                f"(most likely {r['most_likely_score']})")
+
+
+@app.command("countries")
+def countries(competition: str = typer.Option("men")) -> None:
+    """Do population / wealth predict success? (World Bank data)."""
+    res = external.socioeconomic_vs_success(competition)
+    typer.secho(f"\nSocioeconomics vs success ({res['n_countries']} nations):", bold=True)
+    typer.echo(f"  Elo vs log(population)     : rho={res['elo_vs_log_population']['spearman']:+.2f} "
+               f"(p={res['elo_vs_log_population']['p_value']})")
+    typer.echo(f"  Elo vs log(GDP per capita) : rho={res['elo_vs_log_gdp_per_capita']['spearman']:+.2f} "
+               f"(p={res['elo_vs_log_gdp_per_capita']['p_value']})")
 
 
 if __name__ == "__main__":

@@ -57,6 +57,8 @@ streamlit run app/streamlit_app.py
   baseline.
 - **Statistical analyses** — goal-scoring trends, host advantage (Welch t-test), the 0-0
   Poisson paradox, biggest historical upsets, rivalry networks.
+- **External data** — integrates the **World Bank API** (key-free) to test whether a nation's
+  population or GDP-per-capita predicts World Cup success.
 - **Ships an app** — Streamlit dashboard **and** a FastAPI service.
 - **Engineering** — `src/` layout, `pytest` suite, `ruff` linting, GitHub Actions CI, typed
   CLI (`worldcup ...`).
@@ -89,6 +91,7 @@ worldcup build-data          # download & cache the datasets
 worldcup report              # headline findings + figures -> reports/figures/
 worldcup evaluate            # temporal back-test of the outcome model
 worldcup predict Brazil Argentina
+worldcup countries          # does wealth/population predict success? (World Bank)
 ```
 
 Example:

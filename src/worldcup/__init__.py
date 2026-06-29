@@ -1,7 +1,7 @@
 """worldcup -- analytics, Elo ratings and match prediction for the FIFA World Cup."""
 from __future__ import annotations
 
-from . import analysis, config, data, elo, features, models, viz
+from . import analysis, config, data, elo, external, features, models, viz
 from .features import build_matches, build_team_matches
 from .models import MatchPredictor
 
@@ -12,6 +12,7 @@ __all__ = [
     "config",
     "data",
     "elo",
+    "external",
     "features",
     "models",
     "viz",
