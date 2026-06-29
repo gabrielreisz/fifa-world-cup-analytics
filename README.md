@@ -53,6 +53,10 @@ streamlit run app/streamlit_app.py
   *leak-free* feature for prediction.
 - **Two prediction models** — a calibrated 1X2 outcome model (logistic regression on the Elo
   gap) and a Poisson scoreline model (expected goals + full score matrix).
+- **Dixon-Coles model** — full bivariate-Poisson MLE with per-team attack/defence, home
+  advantage, the low-score correction (`rho`) and optional time decay.
+- **Walk-forward back-test** — rolling-origin evaluation across editions with accuracy,
+  log-loss, Brier score and calibration curves.
 - **Honest evaluation** — strict temporal back-test (train pre-2014, test 2014+) against a
   baseline.
 - **Statistical analyses** — goal-scoring trends, host advantage (Welch t-test), the 0-0
@@ -89,6 +93,8 @@ worldcup build-data          # download & cache the datasets
 worldcup report              # headline findings + figures -> reports/figures/
 worldcup evaluate            # temporal back-test of the outcome model
 worldcup predict Brazil Argentina
+worldcup backtest            # walk-forward back-test across editions
+worldcup strengths           # Dixon-Coles attack/defence ratings
 ```
 
 Example:

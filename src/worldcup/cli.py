@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import typer
 
-from . import analysis, data, elo, features, models, viz
+from . import advanced_models, analysis, data, elo, evaluation, features, models, viz
 
 app = typer.Typer(add_completion=False, help="FIFA World Cup analytics toolkit.")
 
@@ -65,6 +65,28 @@ def predict(home: str, away: str) -> None:
     typer.echo(f"  P({away} win) = {r['p_away_win']*100:5.1f}%")
     typer.echo(f"  expected goals: {r['exp_home_goals']} - {r['exp_away_goals']} "
                f"(most likely {r['most_likely_score']})")
+
+
+@app.command("backtest")
+def backtest(start_year: int = typer.Option(1990, help="First edition to evaluate.")) -> None:
+    """Walk-forward back-test of the outcome model across editions."""
+    matches = features.build_matches("men")
+    bt = evaluation.rolling_backtest(matches, start_year=start_year)
+    typer.secho("\nRolling-origin back-test (Elo outcome model):", bold=True)
+    for r in bt.itertuples(index=False):
+        tag = "  ALL" if r.year == "ALL" else f"  {int(r.year)}"
+        typer.echo(f"{tag}: acc {r.accuracy:.3f} | log-loss {r.log_loss:.3f} | "
+                   f"brier {r.brier:.3f} | baseline acc {r.baseline_acc:.3f}")
+
+
+@app.command("strengths")
+def strengths(top: int = typer.Option(10), xi: float = typer.Option(0.0, help="Time-decay/year.")) -> None:
+    """Fit Dixon-Coles and print attack/defence ratings."""
+    matches = features.build_matches("men")
+    dc = advanced_models.DixonColes.fit(matches, xi=xi)
+    typer.secho(f"\nDixon-Coles ratings (home adv {dc.home_adv:.2f}, rho {dc.rho:.3f}):", bold=True)
+    for team, row in dc.ratings().head(top).iterrows():
+        typer.echo(f"  {team:16s} attack {row['attack']:+.2f}  defence {row['defence']:+.2f}")
 
 
 if __name__ == "__main__":
