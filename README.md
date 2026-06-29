@@ -14,6 +14,10 @@ predictions**, an **interactive dashboard** and a **REST API**.
 It started as a university assignment ([`notebooks/academic/`](notebooks/academic/)) and was
 re-engineered into an installable, tested Python package.
 
+<p align="center">
+  <img src="assets/dashboard.gif" alt="Interactive Streamlit dashboard: match predictor, Elo ratings and trends" width="92%"/>
+</p>
+
 > **Resumo (PT-BR):** Projeto completo de ciência de dados sobre as Copas do Mundo. Inclui
 > um pacote Python instalável (`worldcup`) com pipeline de dados, ratings de Elo calculados
 > cronologicamente, testes estatísticos, modelos de previsão de partidas (Elo + Poisson),
