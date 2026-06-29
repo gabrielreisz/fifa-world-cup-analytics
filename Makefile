@@ -22,6 +22,12 @@ coverage:       ## run tests with coverage and refresh the badge
 lint:           ## run ruff
 	ruff check src tests
 
+train:          ## train and persist the match predictor
+	worldcup train
+
+docker-up:      ## build and run the API + dashboard with docker compose
+	docker compose up --build
+
 dashboard:      ## launch the Streamlit dashboard
 	streamlit run app/streamlit_app.py
 
