@@ -5,6 +5,7 @@
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Code style: ruff](https://img.shields.io/badge/lint-ruff-orange)](https://github.com/astral-sh/ruff)
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/deploy?repository=gabrielreisz%2Ffifa-world-cup-analytics&branch=main&mainModule=app%2Fstreamlit_app.py)
 
 An end-to-end data-science project on the men's & women's FIFA World Cup: from raw data
 ingestion to **Elo ratings**, **statistical inference**, **machine-learning match
@@ -18,6 +19,24 @@ re-engineered into an installable, tested Python package.
 > cronologicamente, testes estatísticos, modelos de previsão de partidas (Elo + Poisson),
 > testes automatizados, CI, um dashboard interativo (Streamlit) e uma API (FastAPI). O
 > trabalho acadêmico original está preservado em `notebooks/academic/`.
+
+---
+
+## 🌐 Live demo
+
+The dashboard is ready to run on **Streamlit Community Cloud** (free). Click the
+**Open in Streamlit** badge above (or [this link](https://share.streamlit.io/deploy?repository=gabrielreisz%2Ffifa-world-cup-analytics&branch=main&mainModule=app%2Fstreamlit_app.py)),
+sign in with GitHub and confirm — main file `app/streamlit_app.py`. After the first
+deploy you get a permanent URL like `https://<your-app>.streamlit.app`; paste it here:
+
+> **▶️ Live app:** _add your Streamlit URL after the first deploy_
+
+Locally:
+
+```bash
+pip install -e ".[app]"
+streamlit run app/streamlit_app.py
+```
 
 ---
 
