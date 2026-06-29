@@ -91,6 +91,13 @@ class PoissonScoreModel:
         lam_home, lam_away = (float(v) for v in self.reg.predict(x))
         return lam_home, lam_away
 
+    def expected_goals_neutral(self, elo_a: float, elo_b: float) -> tuple[float, float]:
+        """Expected goals at a neutral venue (home flag = 0.5 for both sides)."""
+        cols = ["team_elo", "opp_elo", "is_home"]
+        x = pd.DataFrame([[elo_a, elo_b, 0.5], [elo_b, elo_a, 0.5]], columns=cols)
+        lam_a, lam_b = (float(v) for v in self.reg.predict(x))
+        return lam_a, lam_b
+
     def scoreline_matrix(self, home_elo: float, away_elo: float) -> np.ndarray:
         lam_home, lam_away = self.expected_goals(home_elo, away_elo)
         g = np.arange(self.max_goals + 1)
